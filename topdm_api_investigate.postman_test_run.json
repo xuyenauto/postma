@@ -1,0 +1,212 @@
+{
+	"info": {
+		"_postman_id": "4902ec77-442d-4fdb-b1f9-b3963bb986da",
+		"name": "topdm_api_investigate",
+		"description": "This collection is used for poc on topdanmark project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "PoC test",
+			"item": [
+				{
+					"name": "insert new blod",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "675b76cf-6035-4816-99c9-02c2f1875595",
+								"exec": [
+									"",
+									"pm.environment.set(\"blod_content\", \"My first blog post :)\");",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"}); ",
+									"",
+									"var expectedContent = pm.variables.get(\"blod_content\");",
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(expectedContent);",
+									"});",
+									"",
+									"//get location",
+									"var blod_link_value = responseHeaders[\"Location\"]",
+									"pm.environment.set(\"blod_link\", blod_link_value);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": \"{{blod_content}}\"\r\n}"
+						},
+						"url": {
+							"raw": "https://jsonblob.com/api/jsonBlob",
+							"protocol": "https",
+							"host": [
+								"jsonblob",
+								"com"
+							],
+							"path": [
+								"api",
+								"jsonBlob"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get blod link",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a544a60f-7dea-4cfe-a226-7a9c2d69f745",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Body matches string\", function () {",
+									"    pm.expect(pm.response.text()).to.include(pm.variables.get(\"blod_content\"));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{blod_link}}",
+							"host": [
+								"{{blod_link}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update blod",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "01717745-a918-4e1e-a861-98cc4108123c",
+								"exec": [
+									"",
+									"// pm.environment.set(\"blon_update\", \"my first blog update\"); ",
+									"",
+									"",
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"tests[\"Has correct updated text\"] = ",
+									"  responseBody.has(\"update blog\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t \"content\": \"update blog\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{blod_link}}",
+							"host": [
+								"{{blod_link}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete blod",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4f457d49-b090-4945-9efb-e6253e0ec6ce",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{blod_link}}",
+							"host": [
+								"{{blod_link}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "verify after delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "50defb09-4bb3-41ac-bacc-2011319a599e",
+								"exec": [
+									"tests[\"Status code is 404\"] =  responseCode.code === 404;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{blod_link}}",
+							"host": [
+								"{{blod_link}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
