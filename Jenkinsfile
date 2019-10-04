@@ -1,6 +1,6 @@
 pipeline{
     agent{
-        label "node"
+        label "xutra"
     }
     stages{
         stage('Run scripts'){
